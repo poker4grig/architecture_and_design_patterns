@@ -7,6 +7,5 @@ def render(template_name, template_folder='templates', **kwargs):
 
     with open(path, encoding='utf-8') as file:
         template = Template(file.read())
-        print('ok\n', template)
 
     return template.render(**kwargs)
