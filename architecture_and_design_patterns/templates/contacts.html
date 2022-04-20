@@ -1,74 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<style type="text/css">
-        @import {{style}};
-    </style>
-	<meta charset="utf-8">
-	<title>Контакты</title>
-	<link rel="stylesheet" href="css/style.css">
-	</head>
+{% extends "base.html" %}
 
-<div class="content">
-	<div class="header">
-		<a href="/">Главная</a>
-		<a href="#">Контакты</a>
-		<a href="about">О нас</a>
-		<a href="watch">Просмотр сериалов</a>
-	</div>
+{% block title %}
+	Контакты
+{% endblock %}
 
-<div class="contentWrap">
+{% block style %}
+	{% include "inc-style.html" %}
+{% endblock %}
 
-    <div class="content">
-        <div class="center">
+{% block menu %}
+	{% include "inc-menu.html" %}
+{% endblock %}
 
-			<h1>Контакты</h1>
+{% block body %}
+	{% include "inc-body-contacts.html" %}
+{% endblock %}
 
-			<div class="box">
-
-				<p id="info">Наш офис находится по адресу: <br>г. Москва, ул. Солянка, дом 5.
-				<br>тел. +7-(921)-777-77-77</p>
-
-
-
-
-
-			</div>
-			<form class="form_class" action="" method="post">
-			<fieldset>
-				<legend>Отправьте нам сообщение</legend>
-				<p><label class="title" for="name">Тема сообщения:</label>
-					 <input type="text" name="name" id="name"><br />
-
-					<label class="title" for="text">Текст сообщения:</label>
-					<p><textarea rows="5" cols="45" name="text"></textarea></p>
-<!--    <p><input type="submit" value="Отправить"></p>-->
-<!--					 <input type="text" name="text" id="text"><br />-->
-
-
-					 <label class="title" for="email">Ваш email:</label>
-					 <input type="text" name="email" id="email"></p>
-
-			</fieldset>
- 	    <div class="submit"><input type="submit" value="Отправить" /></div>
-		</form>
-
-
-        </div>
-
-
-    </div>
-
-</div>
-</div>
-
-
-<div class="footer">
-	Copyright &copy; <?php echo "2022";?> <i>Grigoriev Sergey</i>
-</div>
-
-
-</body>
-</html>
-
- 
+{% block footer %}}
+	{% include "inc-footer.html" %}
+{% endblock %}
