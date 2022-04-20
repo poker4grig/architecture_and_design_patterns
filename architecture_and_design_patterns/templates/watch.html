@@ -1,48 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<style type="text/css">
-        @import {{style}};
-    </style>
-	<meta charset="utf-8">
-	<title>Просмотр сериалов</title>
-	<link rel="stylesheet" href="css/style.css">
+{% extends "base.html" %}
 
-</head>
-<body>
+{% block title %}
+	Просмотр сериалов
+{% endblock %}
 
+{% block style %}
+	{% include "inc-style.html" %}
+{% endblock %}
 
-<div class="content">
-	<div class="header">
-		<a href="/">Главная</a>
-		<a href="about">О нас</a>
-		<a href="contacts">Контакты</a>
-		<a href="#">Просмотр сериалов</a>
-	</div>
+{% block menu %}
+	{% include "inc-menu.html" %}
+{% endblock %}
 
-<div class="contentWrap">
-    <div class="content">
-        <div class="center">
+{% block body %}
+	{% include "inc-watch-body.html" %}
+{% endblock %}
 
-			<h1>Список доступных сериалов</h1>
-
-    {% for cont in content %}
-        <ul>
-        <li> {{ cont }}</li>
-
-        </ul>
-    {% endfor %}
-        </div>
-    </div>
-</div>
-
-
-
-</div>
-<div class="footer">
-	Copyright &copy; <?php echo "2022";?> <i>Grigoriev Sergey</i>
-<div>
-
-
-</body>
-</html>
+{% block footer %}
+	{% include "inc-footer.html" %}
+{% endblock %}

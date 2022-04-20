@@ -1,38 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<style type="text/css">
-        @import {{style}};
-    </style>
-	<meta charset="utf-8">
-	<title>Главная</title>
-	<link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}
+	Главная
+{% endblock %}
 
-<div class="content">
-	<div class="header">
-		<a href="#">Главная</a>
-		<a href="about">О нас</a>
-		<a href="contacts">Контакты</a>
-		<a href="watch">Просмотр сериалов</a>
-	</div>
+{% block style %}
+	{% include "inc-style.html" %}
+{% endblock %}
 
-	<h1>Лучшие отечественные и зарубежные сериалы</h1>
+{% block menu %}
+	{% include "inc-menu.html" %}
+{% endblock %}
 
-	<div class="center">
-	<img src="images/aa.jpg">
-		<div class="box_text">
-			<p>Добрый день! Вы находитесь на лучшем сайте сериалов <b><i>BEST-SERIES.RU</i></b>.</p>
-				<p>Переходите по --> <a href="watch">ссылке</a>и наслаждайтесь!</p>
+{% block body %}
+	{% include "inc-body-index.html" %}
+{% endblock %}
 
-		</div>
-	</div>
-</div>
-<div class="footer">
-	Copyright &copy; <?php echo "2022";?> <i>Grigoriev Sergey</i>
-<div>
-
-
-</body>
-</html>
+{% block footer %}
+	{% include "inc-footer.html" %}
+{% endblock %}

@@ -1,49 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<style type="text/css">
-        @import {{style}};
-    </style>
-	<meta charset="utf-8">
-	<title>О нас</title>
-	<link rel="stylesheet" href="css/style.css">
+{% extends "base.html" %}
 
-</head>
-<body>
+{% block title %}
+	О нас
+{% endblock %}
 
-<div class="content">
-	<div class="header">
-		<a href="/">Главная</a>
-		<a href="contacts">Контакты</a>
-		<a href="#">О нас</a>
-		<a href="watch">Просмотр сериалов</a>
-	</div>
+{% block style %}
+	{% include "inc-style.html" %}
+{% endblock %}
 
-<div class="contentWrap">
-    <div class="content">
-        <div class="center">
+{% block menu %}
+	{% include "inc-menu.html" %}
+{% endblock %}
 
-			<h1>О нас</h1>
+{% block body %}
+	{% include "inc-body-about.html" %}
+{% endblock %}
 
-			<div class="box">
-
-				<p>Наш сайт предоставляет доступ к лучшим отечественным и зарубежным сериалам. У нас появилась уникальная возможность насладиться просмотром сериалов разнообразных категорий на любой вкус!</p>
-				
-				<br>
-				<a href="watch">Перейти к просмотру</a>
-			</div>
-
-        </div>
-    </div>
-</div>
-
-	
-
-</div>
-<div class="footer">
-	Copyright &copy; <?php echo "2022";?> <i>Grigoriev Sergey</i>
-<div>
-
-
-</body>
-</html>
+{% block footer %}}
+	{% include "inc-footer.html" %}
+{% endblock %}
