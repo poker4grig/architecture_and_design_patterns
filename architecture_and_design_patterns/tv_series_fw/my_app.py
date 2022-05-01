@@ -29,6 +29,9 @@ class MyFramework:
         if method == 'GET':
             request_params = GetMethod().get_request_params(environ)
             # 127.0.0.1:8000?id=1&category=10  # Пример для ввода
+            for key, value in request_params.items():
+                value = urllib.parse.unquote_plus(value)
+                request_params[key] = value
             request['request_params'] = request_params
             pprint(f'Приняты параметры GET-запроса: {request_params}')
 
@@ -40,8 +43,8 @@ class MyFramework:
             request['data'] = data
             # request['data'] = urllib.parse.unquote_plus(str(data))
             pprint(f'Приняты параметры POST-запроса: {request["data"]}')
-            pprint(f'Вам пришло сообщение от пользователя: '
-                   f'{request["data"]["text"]}')
+            # pprint(f'Вам пришло сообщение от пользователя: '
+            #        f'{request["data"]["text"]}')
         for middleware in self.middlewares:
             middleware(request)
 

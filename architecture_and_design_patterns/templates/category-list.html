@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}
+Список жанров
+{% endblock %}
+{% block style %}
+	{% include "inc-style.html" %}
+{% endblock %}
+{% block menu %}
+	{% include "inc-menu.html" %}
+{% endblock %}
+{% block body %}
+    <div class="content">
+        <a href="/">назад</a>
+
+        <h1>Список жанров</h1>
+        <ul>
+
+            {% for item in objects_list %}
+            <li>
+                {{item.name}} <span>Количество сериалов: {{item.series_count()}}</span>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div>
+            <li><a href="/series-list/">Список сериалов</a></li>
+            <li><a href="/create-series/">Создать сериал</a></li>
+        </div>
+        </div>
+{% endblock %}
+
+{% block footer %}}
+	{% include "inc-footer.html" %}
+{% endblock %}

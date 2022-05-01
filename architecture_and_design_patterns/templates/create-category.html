@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}
+Создание жанра
+
+{% endblock %}
+{% block style %}
+	{% include "inc-style.html" %}
+{% endblock %}
+
+{% block menu %}
+	{% include "inc-menu.html" %}
+{% endblock %}
+
+{% block body %}
+<div class="content">
+	<h1>Создание жанра</h1>
+	<h2>Например: Drama, Horror, Soviet, Comedy, Musical, Detective, Crime, Action, Thriller, Animated, Cartoon, Science, Фэнтези</h2>
+	<form method="post">
+		<input type="text" name="name" placeholder="Название">
+		<button type="submit">Сохранить и вернуться на главную</button>
+	</form>
+</div>
+{% endblock %}
+
+{% block footer %}
+	{% include "inc-footer.html" %}
+{% endblock %}
