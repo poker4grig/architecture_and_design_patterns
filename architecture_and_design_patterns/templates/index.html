@@ -13,6 +13,18 @@
 
 {% block body %}
 	{% include "inc-body-index.html" %}
+	<div>
+		<a href="/create-category/">Создать новый жанр</a>
+	</div>
+	<div>
+		<h1>Список существующих жанров</h1>
+        {% for item in objects_list %}
+        <li>
+            {{item.name}} <span>Количество сериалов: {{item.series_count()}}</span>
+			<a href="/series-list/?id={{item.id}}">Показать доступные сериалы и фильмы</a>
+        </li>
+        {% endfor %}
+	</div>
 {% endblock %}
 
 {% block footer %}

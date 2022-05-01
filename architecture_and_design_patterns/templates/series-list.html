@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}
+Список сериалов
+{% endblock %}
+{% block style %}
+	{% include "inc-style.html" %}
+{% endblock %}
+{% block menu %}
+	{% include "inc-menu.html" %}
+{% endblock %}
+{% block body %}
+    <div>
+        <a href="/">назад на главную</a>
+    </div>
+
+    <br>
+    <br>
+
+    <div>
+        <a href="/create-series/?id={{id}}">Создать новый сериал</a>
+        <br>
+        <h1>Список сериалов для жанра "{{name}}"</h1>
+        {% for item in objects_list %}
+        <li>
+            {{item.name}} <span><a href="/copy-series/?name={{item.name}}">скопировать сериал</a></span>
+        </li>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block footer %}
+	{% include "inc-footer.html" %}
+{% endblock %}
