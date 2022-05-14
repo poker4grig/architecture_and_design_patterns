@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}
+Создание посетителя
+{% endblock %}
+{% block style %}
+	{% include "inc-style.html" %}
+{% endblock %}
+{% block menu %}
+	{% include "inc-menu.html" %}
+{% endblock %}
+{% block body %}
+	<div>
+		<li>
+			<a href="/visitor-list/">Список посетителей</a>
+		</li>
+		<li>
+			<a href="/add-visitor/">Добавить посетителя на просмотр</a>
+		</li>
+	</div>
+    <div>
+        <h1>Создание посетителя</h1>
+        <form method="post">
+            <input type="text" name="name" placeholder="Имя">
+            <button type="submit">Добавить</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block footer %}
+	{% include "inc-footer.html" %}
+{% endblock %}

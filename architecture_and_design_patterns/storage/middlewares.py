@@ -34,4 +34,4 @@ def middle_css(request):
         request['style'] = css_file
 
 
-middlewares = [middleware_date, middleware_series, middle_css, ]
+middlewares = [middleware_date, middleware_series, middle_css]
