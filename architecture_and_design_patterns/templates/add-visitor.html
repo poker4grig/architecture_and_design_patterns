@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}
+Добавление посетителей
+{% endblock %}
+{% block style %}
+	{% include "inc-style.html" %}
+{% endblock %}
+{% block menu %}
+	{% include "inc-menu.html" %}
+{% endblock %}
+{% block body %}
+	<div>
+		<li>
+			<a href="/visitor-list/">Список посетителей</a>
+		</li>
+		<li>
+			<a href="/create-visitor/">Создать посетителя</a>
+		</li>
+	</div>
+    <h1>Добавление посетителя к просмотру</h1>
+    <form method="post">
+        <select size="3" name="series_name">
+            {% for item in serieses %}
+            <option value="{{item.name}}">{{item.name}}</option>
+            {% endfor %}
+        </select>
+        <select size="3" name="visitor_name">
+            {% for item in visitors %}
+            <option value="{{item.name}}">{{item.name}}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Добавить</button>
+    </form>
+{% endblock %}
+
+{% block footer %}
+	{% include "inc-footer.html" %}
+{% endblock %}

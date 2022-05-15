@@ -1,48 +1,62 @@
 import copy
 import urllib.parse
+from patterns.behavioral_patterns import Subject, ConsoleWriter
 
 
 # абстрактный пользователь
 class User:
-    pass
+    def __init__(self, name):
+        self.name = name
 
 
 # Пользователь без подписки
-class FreeUser(User):
+class Staff(User):
     pass
 
 
 # Пользователь с подпиской
-class SubscribedUser(User):
-    pass
+class Visitor(User):
+    def __init__(self, name):
+        self.serieses = []
+        super().__init__(name)
 
 
 # порождающий паттерн Абстрактная фабрика - фабрика пользователей
 class UserFactory:
     types = {
-        'free': FreeUser,
-        'subscribed': SubscribedUser
+        'staff': Staff,
+        'visitor': Visitor
     }
 
     # порождающий паттерн Фабричный метод
     @classmethod
-    def create(cls, type_):
-        return cls.types[type_]()
+    def create(cls, type_, name):
+        return cls.types[type_](name)
 
 
-# порождающий паттерн Прототип - Подписки (уровень доступа)
+# порождающий паттерн Прототип - Добавление посетителя к просмотру сериала
 class SeriesPrototype:
 
     def clone(self):
         return copy.deepcopy(self)
 
 
-class Series(SeriesPrototype):
+class Series(SeriesPrototype, Subject):
     """Класс - сериалы"""
     def __init__(self, name, category):
         self.name = name
         self.category = category
         self.category.serieses.append(self)
+        self.visitors = []
+        super().__init__()
+
+    def __getitem__(self, item):
+        return self.visitors[item]
+
+    def add_visitor(self, visitor: Visitor):
+        self.visitors.append(visitor)
+        visitor.serieses.append(self)
+        self.notify()
 
 
 class Online(Series):
@@ -83,14 +97,14 @@ class SeriesFactory:
 
 class Interface:
     def __init__(self):
-        self.free_users = []
-        self.subscribed_users = []
+        self.staffs = []
+        self.visitors = []
         self.serieses = []
         self.categories = []
 
     @staticmethod
-    def create_user(type_):
-        return UserFactory.create(type_)
+    def create_user(type_, name):
+        return UserFactory.create(type_, name)
 
     @staticmethod
     def create_category(name, category=None):
@@ -107,19 +121,25 @@ class Interface:
     def create_series(type_, name, category):
         return SeriesFactory.create(type_, name, category)
 
-    def get_series(self, name):
+    def get_series(self, name) -> Series:
         for item in self.serieses:
             if item.name == name:
                 return item
         return None
+
+    def get_visitor(self, name) -> Visitor:
+        for item in self.visitors:
+            if item.name == name:
+                return item
 
     @staticmethod
     def decode_value(val):
         value = urllib.parse.unquote_plus(val)
         # val_b = bytes(val.replace('%', '=').replace("+", " "), 'UTF-8')
         # val_decode_str = quopri.decodestring(val_b
-
+        # return val_decode_str.decode('UTF-8')
         return value
+
 
 class SingletonByName(type):
     """Одиночка - метакласс, т.н. "Фабрика классов"""
@@ -143,9 +163,10 @@ class SingletonByName(type):
 
 class Logger(metaclass=SingletonByName):
 
-    def __init__(self, name):
+    def __init__(self, name, writer=ConsoleWriter()):
         self.name = name
+        self.writer = writer
 
-    @staticmethod
-    def log(text):
-        print('log--->', text)
+    def log(self, text):
+        text = f'log---> {text}'
+        self.writer.write(text)
