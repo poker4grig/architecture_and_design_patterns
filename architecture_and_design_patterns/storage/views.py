@@ -28,6 +28,8 @@ class Index:
     @Debug(name='Index')
     def __call__(self, request):
         # return '200 OK', render('index.html', style=request.get('style', None))
+        # return '200 OK', render('index.html', objects_list=site.categories,
+        #                         geo=request.get('geo', None))
         return '200 OK', render('index.html', objects_list=site.categories)
 
 

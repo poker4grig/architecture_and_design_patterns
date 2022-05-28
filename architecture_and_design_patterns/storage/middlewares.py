@@ -1,5 +1,6 @@
 # слои middleware
-
+from json import loads
+from requests import get
 from datetime import date
 
 
@@ -34,4 +35,17 @@ def middle_css(request):
         request['style'] = css_file
 
 
+# Регион пользователя (служба работает с перебоями)
+def get_geo_info(request):
+    # ip_addr = environ.get('REMOTE_ADDR', '')
+    ip_addr = '91.108.35.134'
+    if ip_addr:
+        request_url = 'https://geolocation-db.com/jsonp/' + ip_addr
+        response = get(request_url)
+        result = response.content.decode()
+        result = result.split("(")[1].strip(")")
+        request['geo'] = loads(result)
+
+
+# middlewares = [middleware_date, middleware_series, middle_css, get_geo_info]
 middlewares = [middleware_date, middleware_series, middle_css]
