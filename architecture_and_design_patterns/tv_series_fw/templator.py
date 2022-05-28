@@ -2,9 +2,10 @@ from jinja2 import Template, FileSystemLoader
 from jinja2.environment import Environment
 
 
-def render(template_name, template_folder='templates', **kwargs):
+def render(template_name, template_folder='templates', static_url='/static/', **kwargs):
     env = Environment()
     env.loader = FileSystemLoader(template_folder)
+    env.globals['static'] = static_url
     template = env.get_template(template_name)
     return template.render(**kwargs)
 
