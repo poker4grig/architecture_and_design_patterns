@@ -30,7 +30,7 @@ def middleware_series(request):
 
 
 def middle_css(request):
-    with open('templates/css/style.css') as file:
+    with open('staticfiles/css/style.css') as file:
         css_file = file.read()
         request['style'] = css_file
 
@@ -47,5 +47,6 @@ def get_geo_info(request):
         request['geo'] = loads(result)
 
 
+# Так как работает не всегда, определение региона отключаю
 # middlewares = [middleware_date, middleware_series, middle_css, get_geo_info]
 middlewares = [middleware_date, middleware_series, middle_css]

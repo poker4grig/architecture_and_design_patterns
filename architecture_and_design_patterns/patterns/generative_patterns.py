@@ -1,6 +1,9 @@
 import copy
+import sqlite3
 import urllib.parse
+
 from patterns.behavioral_patterns import Subject, ConsoleWriter
+from patterns.architectural_patterns import DomainObject
 
 
 # абстрактный пользователь
@@ -15,7 +18,7 @@ class Staff(User):
 
 
 # Пользователь с подпиской
-class Visitor(User):
+class Visitor(User, DomainObject):
     def __init__(self, name):
         self.serieses = []
         super().__init__(name)
@@ -112,7 +115,6 @@ class Interface:
 
     def find_category_by_id(self, id):
         for item in self.categories:
-            print('item', item.id)
             if item.id == id:
                 return item
         raise Exception(f'Нет категории с id = {id}')
@@ -170,3 +172,102 @@ class Logger(metaclass=SingletonByName):
     def log(self, text):
         text = f'log---> {text}'
         self.writer.write(text)
+
+
+class VisitorMapper:
+
+    def __init__(self, connection):
+        self.connection = connection
+        self.cursor = connection.cursor()
+        self.tablename = 'visitor'
+
+    def all(self):
+        statement = f'SELECT * from {self.tablename}'
+        self.cursor.execute(statement)
+        result = []
+        for item in self.cursor.fetchall():
+            id, name = item
+            visitor = Visitor(name)
+            visitor.id = id
+            result.append(visitor)
+        return result
+
+    def find_by_id(self, id):
+        statement = f"SELECT id, name FROM {self.tablename} WHERE id=?"
+        self.cursor.execute(statement, (id,))
+        result = self.cursor.fetchone()
+        if result:
+            return Visitor
+        else:
+            raise RecordNotFoundException(f'record with id={id} not found')
+
+    def insert(self, obj):
+        statement = f"INSERT INTO {self.tablename} (name) VALUES (?)"
+        self.cursor.execute(statement, (obj.name,))
+        try:
+            self.connection.commit()
+        except Exception as e:
+            raise DbCommitException(e.args)
+
+    def update(self, obj):
+        statement = f"UPDATE {self.tablename} SET name=? WHERE id=?"
+        # находим id с самым большим значением (последний добавленный user)
+        _id = f"SELECT * FROM {self.tablename} ORDER BY id DESC LIMIT 1"
+        self.cursor.execute(_id)
+        obj.id = self.cursor.fetchone()[0]
+        self.cursor.execute(statement, (obj.name, obj.id))
+        try:
+            self.connection.commit()
+        except Exception as e:
+            raise DbUpdateException(e.args)
+
+    def delete(self, obj):
+        statement = f"DELETE FROM {self.tablename} WHERE id=?"
+        self.cursor.execute(statement, (obj.id,))
+        try:
+            self.connection.commit()
+        except Exception as e:
+            raise DbDeleteException(e.args)
+
+
+connection = sqlite3.connect('patterns.sqlite')
+
+
+# архитектурный системный паттерн - Data Mapper
+class MapperRegistry:
+    mappers = {
+        'visitor': VisitorMapper,
+        # 'category': CategoryMapper
+    }
+
+    @staticmethod
+    def get_mapper(obj):
+        if isinstance(obj, Visitor):
+            return VisitorMapper(connection)
+        # if isinstance(obj, Category):
+        #     return CategoryMapper(connection)
+
+    @staticmethod
+    def get_current_mapper(name):
+        return MapperRegistry.mappers[name](connection)
+
+
+# Собственные исключения
+class DbCommitException(Exception):
+    def __init__(self, message):
+        super().__init__(f'Db commit error: {message}')
+
+
+class DbUpdateException(Exception):
+    def __init__(self, message):
+        super().__init__(f'Db update error: {message}')
+
+
+class DbDeleteException(Exception):
+    def __init__(self, message):
+        super().__init__(f'Db delete error: {message}')
+
+
+class RecordNotFoundException(Exception):
+    def __init__(self, message):
+        super().__init__(f'Record not found: {message}')
