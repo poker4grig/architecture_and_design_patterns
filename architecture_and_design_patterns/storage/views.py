@@ -1,10 +1,11 @@
 from datetime import date
 
 from tv_series_fw.templator import render
-from patterns.generative_patterns import Interface, Logger
+from patterns.generative_patterns import Interface, Logger, MapperRegistry
 from patterns.structural_patterns import AppRoute, Debug
-from patterns.behavioral_patterns import EmailNotifier, SmsNotifier, \
-    TemplateView, ListView, CreateView, BaseSerializer
+from patterns.behavioral_patterns import EmailNotifier, SmsNotifier, ListView,\
+    CreateView, BaseSerializer
+from patterns.architectural_patterns import UnitOfWork
 
 
 site = Interface()
@@ -12,6 +13,8 @@ email_notifier = EmailNotifier()
 sms_notifier = SmsNotifier()
 logger = Logger('main')
 routes = dict()
+UnitOfWork.new_current()
+UnitOfWork.get_current().set_mapper_registry(MapperRegistry)
 
 site.categories.append(site.create_category('Драма'))
 site.categories.append(site.create_category('Боевик'))
@@ -28,14 +31,14 @@ class Index:
     @Debug(name='Index')
     def __call__(self, request):
         # return '200 OK', render('index.html', style=request.get('style', None))
-        return '200 OK', render('index.html', objects_list=site.categories)
+        return '200 OK', render('index.html', objects_list=site.categories,
+                                geo=request.get('geo', None))
 
 
 @AppRoute(routes=routes, url='/about/')
 class About:
     @Debug(name='About')
     def __call__(self, request):
-        # return '200 OK', render('about.html', style=request.get('style', None))
         return '200 OK', render('about.html')
 
 
@@ -169,16 +172,14 @@ class CopySeries:
 class Contacts:
     @Debug(name='Contacts')
     def __call__(self, request):
-        return '200 OK', render('contacts.html', style=request.get('style',
-                                                                   None))
+        return '200 OK', render('contacts.html')
 
 
 @AppRoute(routes=routes, url='/watch/')
 class Watch:
     @Debug(name='Watch')
     def __call__(self, request):
-        return '200 OK', render('watch.html', style=request.get('style', None),
-                                content=request.get('series', None))
+        return '200 OK', render('watch.html', content=request.get('series', None))
 
 
 @AppRoute(routes=routes, url='/api/')
@@ -190,8 +191,11 @@ class SeriesApi:
 
 @AppRoute(routes=routes, url='/visitor-list/')
 class VisitorListView(ListView):
-    queryset = site.visitors
     template_name = 'visitor-list.html'
+
+    def get_queryset(self):
+        mapper = MapperRegistry.get_current_mapper('visitor')
+        return mapper.all()
 
 
 @AppRoute(routes=routes, url='/create-visitor/')
@@ -203,6 +207,8 @@ class VisitorCreateView(CreateView):
         name = site.decode_value(name)
         new_obj = site.create_user('visitor', name)
         site.visitors.append(new_obj)
+        new_obj.mark_new()
+        UnitOfWork.get_current().commit()
 
 
 @AppRoute(routes=routes, url='/add-visitor/')
@@ -223,3 +229,5 @@ class AddVisitorOnSeriesCreateView(CreateView):
         visitor_name = site.decode_value(visitor_name)
         visitor = site.get_visitor(visitor_name)
         series.add_visitor(visitor)
+        visitor.mark_dirty()
+        UnitOfWork.get_current().commit()

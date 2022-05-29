@@ -1,13 +1,17 @@
 <div class="content">
 
-
+    <h5>{% if geo.country_name != 'Not found' %}
+            <p style="text-align: center">Ваш регион: {{ geo.country_name }}</p>
+        {% endif %}</h5>
 	<h1>Лучшие отечественные и зарубежные сериалы и фильмы</h1>
 
 	<div class="center">
-	<p><img src="images/aa.jpg"></p>
-		<div class="box_text">
-			<p>Добрый день! Вы находитесь на лучшем сайте сериалов и фильмов <b><i>BEST-SERIES.RU</i></b>.</p>
-				<p>Переходите по --> <a href="watch">ссылке</a>и наслаждайтесь!</p>
+	<div><img src="/staticfiles/images/aa.jpg" alt="No file" style="width: 50%; height: 100%; right: 100px;
+    object-fit: cover"></div>
+
+        <div class="box_text">
+			<p>Добрый день! Вы находитесь на лучшем сайте сериалов и фильмов <b><i>BEST-SERIES.RU.</i></b><br><b>Прямо здесь и сейчас вы можете добавиться к просмотру нашего контента!</b>
+				<br>Переходите по --> <a href="watch">ссылке</a>и наслаждайтесь!</p>
 
 		</div>
 	</div>

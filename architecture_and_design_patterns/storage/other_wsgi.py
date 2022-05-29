@@ -1,4 +1,4 @@
-from my_app import MyFramework
+from tv_series_fw.my_app import MyFramework
 
 
 class DebugApp(MyFramework):

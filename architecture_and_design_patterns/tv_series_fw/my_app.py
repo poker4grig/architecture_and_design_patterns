@@ -1,6 +1,6 @@
 from storage.views import PageNotExists
 import urllib.parse
-from request_methods import GetMethod, PostMethod
+from tv_series_fw.request_methods import GetMethod, PostMethod
 from pprint import pprint
 
 

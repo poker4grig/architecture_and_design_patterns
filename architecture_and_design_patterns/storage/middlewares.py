@@ -1,5 +1,6 @@
 # слои middleware
-
+from json import loads
+from requests import get
 from datetime import date
 
 
@@ -29,9 +30,23 @@ def middleware_series(request):
 
 
 def middle_css(request):
-    with open('templates/css/style.css') as file:
+    with open('staticfiles/css/style.css') as file:
         css_file = file.read()
         request['style'] = css_file
 
 
+# Регион пользователя (служба работает с перебоями)
+def get_geo_info(request):
+    # ip_addr = environ.get('REMOTE_ADDR', '')
+    ip_addr = '91.108.35.134'
+    if ip_addr:
+        request_url = 'https://geolocation-db.com/jsonp/' + ip_addr
+        response = get(request_url)
+        result = response.content.decode()
+        result = result.split("(")[1].strip(")")
+        request['geo'] = loads(result)
+
+
+# Так как работает не всегда, определение региона отключаю
+# middlewares = [middleware_date, middleware_series, middle_css, get_geo_info]
 middlewares = [middleware_date, middleware_series, middle_css]
